@@ -7,7 +7,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.chrome.options import Options
-from information import serenity,login,password,firefly,task_fio,task_phone,task_address,task_language,coordinates,question_text,new_name_reglament,new_name_question
+from information import serenity,login,password,firefly,task_fio,task_phone,task_address,task_language,coordinates,question_text,new_name_reglament,new_name_question,name_of_new_reglament,name_of_new_task,edited_name_task
 from colorama import init, Fore, Back, Style
 
                              #   test number 41 (ipe-41: Открытие приложения)
@@ -158,7 +158,7 @@ else:
 
 name_of_new_reg = driver.find_element(By.XPATH, "//input[@placeholder='Название регламента']") #поиск и клик на инпут "название регламента"
 name_of_new_reg.click()
-name_of_new_reg.send_keys("autotest")
+name_of_new_reg.send_keys(name_of_new_reglament)
 
 
 add_question = driver.find_element(By.XPATH, "//input[@id='mat-input-3'][1]") #поиск и клик по инпуту в поле "Вопросы"
@@ -378,7 +378,7 @@ else:
 #заполнение поля у нового регламента задач
 name_of_new_reg_task = driver.find_element(By.XPATH, "//input[@placeholder='Название регламента']")
 name_of_new_reg_task.click()
-name_of_new_reg_task.send_keys("autotest_new_task")
+name_of_new_reg_task.send_keys(name_of_new_task)
 
 #выпадающий список групп
 groups_regl_task = driver.find_element(By.XPATH, "//div[@aria-hidden='true']//div//span[contains(text(),'Группы')]")
@@ -452,7 +452,7 @@ else:
 name_of_new_reg_task = driver.find_element(By.XPATH, "//input[@placeholder='Название регламента']")
 name_of_new_reg_task.click()
 name_of_new_reg_task.clear()
-name_of_new_reg_task.send_keys("edited_autotest_task")
+name_of_new_reg_task.send_keys(edited_name_task)
 
 
 edit_groups_reg_task = driver.find_element(By.XPATH, "//span[contains(text(),'Группа 1, Группа 2, Группа 3, Группа 4, Группа 5')]")
