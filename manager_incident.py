@@ -67,7 +67,7 @@ except TimeoutException:
     print(Fore.RED + "Авторизация не произошла")
     driver.quit()
 
-time.sleep(2)
+time.sleep(2) #микро-костыль
 
 #проверка где я нахожусь, ищу по левой панели
 try:
