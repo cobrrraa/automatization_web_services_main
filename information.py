@@ -45,7 +45,7 @@ center_login = "dimatest"
 center_pass = "dimatest"
 
 #информация для нового юзера в ЦА
-new_user_login = "ilya_autotest123"
-new_user_pass = "ilya_autotest123"
+new_user_login = "ilya_autotest"
+new_user_pass = "ilya_autotest"
 
 
