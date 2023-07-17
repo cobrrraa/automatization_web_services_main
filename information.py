@@ -47,5 +47,14 @@ center_pass = "dimatest"
 #информация для нового юзера в ЦА
 new_user_login = "ilya_autotest"
 new_user_pass = "ilya_autotest"
+new_user_lastname = "Autotest"
+new_user_name = "Autotest"
+new_user_patronymic = "Autotestovich"
 
 
+#информация для редактирования информации о юзере
+edited_user_login = "edited_ilya_autotest"
+edited_user_pass = "edited_ilya_autotest"
+edited_user_lastname = "Autotest_edited"
+edited_user_name = "Autotest_edited"
+edited_user_patronymic = "Autotestovich_edited"
