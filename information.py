@@ -58,3 +58,7 @@ edited_user_pass = "edited_ilya_autotest"
 edited_user_lastname = "Autotest_edited"
 edited_user_name = "Autotest_edited"
 edited_user_patronymic = "Autotestovich_edited"
+
+#информация для логина под фф
+center_ff_login = "firefly"
+center_ff_pass = "firefly"

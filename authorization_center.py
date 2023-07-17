@@ -7,7 +7,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.chrome.options import Options
-from information import serenity,center_login,center_pass,firefly,new_user_login,new_user_pass,new_user_lastname,new_user_name,new_user_patronymic,edited_user_login,edited_user_pass,edited_user_name,edited_user_lastname,edited_user_patronymic
+from information import serenity,center_login,center_pass,firefly,new_user_login,new_user_pass,new_user_lastname,new_user_name,new_user_patronymic,edited_user_login,edited_user_pass,edited_user_name,edited_user_lastname,edited_user_patronymic,center_ff_login,center_ff_pass
 from colorama import init, Fore, Back, Style
 
 
@@ -190,6 +190,10 @@ edit_user_name = driver.find_element(By.XPATH, "//input[@placeholder='Имя']")
 edit_user_name.clear()
 edit_user_name.send_keys(edited_user_name)
 
+edit_user_name = driver.find_element(By.XPATH, "//input[@placeholder='Отчество']")
+edit_user_name.clear()
+edit_user_name.send_keys(edited_user_patronymic)
+
 
 #ожидание открытия выпадающего списка
 try:
@@ -251,7 +255,7 @@ except TimeoutException:
     print(Fore.RED + "Не смог выбрать из выпадающего списка кнопку 'Удалить'")
     driver.quit()
 
-
+#подтверждение на удаление юзера
 try:
     warning_message = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, "//app-dialog[@class='ng-star-inserted']")))
     print(Fore.GREEN + "Предупреждение 'Удаление пользователя. Подтвердите удаление пользователя ... появилось'")
@@ -260,16 +264,109 @@ except TimeoutException:
     print(Fore.RED + "Предупреждение при удалении не появилось")
     driver.quit()
 
-
+#подтверждение удаления
 accept_delete_user = driver.find_element(By.XPATH, "//span[contains(text(),'Подтвердить')]")
 accept_delete_user.click()
 
-
+#проверка на уведомление
 try:
-    noty_message = WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.XPATH,"//snack-bar-container[@role='alert']")))
+    noty_message = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH,"//snack-bar-container[@role='alert']")))
     print(Fore.BLUE + "ipe-1382 Удаление пользователя - ПРОЙДЕН")
     close_noty = driver.find_element(By.XPATH, "//button[contains(text(),'Закрыть')]")
     close_noty.click()
 except TimeoutException:
     print(Fore.RED + "Удаление не произошло / Не появилось уведомление")
+
+#f5
+driver.refresh()
+
+
+try:
+    auth_wait = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, "//input[@id='id_username']")))
+    print(Fore.GREEN + "Страница перезапустилась, открыто окно с авторизацией")
+
+except TimeoutException:
+    print(Fore.RED + "Страница не перезапустилась / Окно авторизации не открылось")
+    driver.quit()
+
+#релогин под фф
+
+try:
+    wait_settings_button = WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, "//button[@title='Включить настройку подключений']")))
+except TimeoutException:
+    print("Не смог нажать на шестеренку")
+    driver.quit()
+
+
+#пока что закоментил, т.к хз надо или нет
+
+#input_ipaddr = driver.find_element(By.ID, 'ip_address')  # заполнение поля айпи адрес
+#input_ipaddr.click()
+
+#input_ipaddr.send_keys(serenity)
+
+
+input_login = driver.find_element(By.ID, 'id_username')  # заполнение поля логин
+input_login.click()
+
+input_login.send_keys(center_ff_login)
+
+
+input_password = driver.find_element(By.ID, 'id_password')  # заполнение поля пароль
+input_password.click()
+input_password.send_keys(center_ff_pass)
+
+input_password.send_keys(Keys.RETURN)
+
+#ожидание прогрузки страницы под фф
+
+try:
+    wait_ff_page = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, "//mat-card-title[contains(text(),'Роли')]")))
+    print(Fore.GREEN + "Авторизовался под firefly/firefly")
+except TimeoutException:
+    print(Fore.RED + "Не авторизовался под firefly/firefly")
+    driver.quit()
+
+dropdown_edit_user = driver.find_element(By.XPATH, "//body[1]/app-root[1]/div[2]/app-dashboard[1]/app-editor-users[1]/div[1]/div[2]/div[1]/div[1]/mat-card[1]/div[1]/div[3]/button[1]/span[1]/mat-icon[1]")
+dropdown_edit_user.click()
+
+#ожидание прогрузки выпадающего списка с редактированием информации о юзере
+try:
+    wait_dropdown_editors = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, "//div[@class='mat-menu-content ng-trigger ng-trigger-fadeInItems']")))
+    print(Fore.GREEN + "Открыл выпадающий список для редактирования юзера")
+except TimeoutException:
+    print(Fore.RED + "Не открыл выпадающий список для редактирования юзера")
+    driver.quit()
+
+#ожидание пока "Редактировать" станет доступной
+try:
+    edit_wait = WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, "//span[contains(text(),'Менеджер ролей')]")))
+    time.sleep(0.75)
+    edit_button = driver.find_element(By.XPATH, "//span[contains(text(),'Менеджер ролей')]")
+    edit_button.click()
+    print(Fore.GREEN + "Нажал на 'Менеджер ролей'")
+except TimeoutException:
+    print(Fore.RED + "Не смог выбрать из выпадающего списка кнопку 'Менеджер ролей'")
+    driver.quit()
+
+
+choose_mng_role = driver.find_element(By.XPATH, "//span[normalize-space()='AllReadRole']")
+choose_mng_role.click()
+
+time.sleep(0.5) #добавить проверку..
+
+save_mng_role = driver.find_element(By.XPATH, "//span[contains(text(),'Сохранить')]")
+save_mng_role.click()
+
+#проверка на появление уведомления после создания + его закрытия, для прохождения дальнейших тестов
+try:
+    noty_message = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH,"//snack-bar-container[@role='alert']")))
+    print(Fore.BLUE + "ipe-1383:Добавление роли пользователю - ПРОЙДЕН")
+    close_noty = driver.find_element(By.XPATH, "//button[contains(text(),'Закрыть')]")
+    close_noty.click()
+except TimeoutException:
+    print(Fore.RED + "Роль не изменилась/ Не появилось уведомление")
+
+
+
 time.sleep(2)
