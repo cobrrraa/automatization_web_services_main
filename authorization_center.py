@@ -55,7 +55,7 @@ input_password.send_keys(Keys.RETURN)
 
                                          #ipe-1380:Создание нового пользователя
 try:
-    wait_main_page = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//div[@class='card-container']")))
+    wait_main_page = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, "//div[@class='card-container']")))
     print(Fore.GREEN + "Авторизация произошла успешно")
     print(Fore.BLUE + "ipe - 1378: Открытие приложения - ПРОЙДЕНО")
 except TimeoutException:
@@ -67,7 +67,7 @@ add_new_user.click()
 
 #ожидание открытия модального окна с данными для заполнения для нового юзера
 try:
-    new_user_popup_wait = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//body/app-root/div/app-dashboard/app-editor-users/div/div/div/div/mat-card[1]/div[1]")))
+    new_user_popup_wait = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, "//body/app-root/div/app-dashboard/app-editor-users/div/div/div/div/mat-card[1]/div[1]")))
     print(Fore.GREEN + "Открыл окно с добавлением данных о новом юзере")
 
 except TimeoutException:
@@ -95,7 +95,7 @@ dropdown_new_role.click()
 
 #ожидание открытия выпадающего списка
 try:
-    wait_dropdown_role = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//div[@class='cdk-overlay-pane']")))
+    wait_dropdown_role = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, "//div[@class='cdk-overlay-pane']")))
     print(Fore.GREEN + "Выпадающий список с ролями открылся")
 #    time.sleep(0.7)
 except TimeoutException:
@@ -104,7 +104,7 @@ except TimeoutException:
 
 #ожидание пока кнопка админ станет доступной
 try:
-    wait_new_role = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//span[normalize-space()='Admin']")))
+    wait_new_role = WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, "//span[normalize-space()='Admin']")))
     choose_new_role = driver.find_element(By.XPATH, "//span[normalize-space()='Admin']")
     choose_new_role.click()
 except TimeoutException:
@@ -120,7 +120,7 @@ save_new_user.click()
 
 #проверка на появление уведомления после создания + его закрытия, для прохождения дальнейших тестов
 try:
-    noty_message = WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.XPATH,"//snack-bar-container[@role='alert']")))
+    noty_message = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH,"//snack-bar-container[@role='alert']")))
     print(Fore.BLUE + "ipe-1380:Создание нового пользователя - ПРОЙДЕН")
     close_noty = driver.find_element(By.XPATH, "//button[contains(text(),'Закрыть')]")
     close_noty.click()
@@ -132,7 +132,7 @@ amount_of_users = driver.find_element(By.XPATH, "//div[@class='mat-select-arrow-
 amount_of_users.click()
 #
 try:
-    wait_amount_of_users = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//div[@class='mat-select-content ng-trigger ng-trigger-fadeInContent']")))
+    wait_amount_of_users = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, "//div[@class='mat-select-content ng-trigger ng-trigger-fadeInContent']")))
     print(Fore.GREEN + "Увеличил кол-во отображаемых юзеров на странице до 100")
     increase_users = driver.find_element(By.XPATH, "//span[normalize-space()='100']")
     increase_users.click()
@@ -146,7 +146,7 @@ dropdown_edit_user.click()
 
 #ожидание прогрузки выпадающего списка с редактированием информации о юзере
 try:
-    wait_dropdown_editors = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//div[@class='mat-menu-content ng-trigger ng-trigger-fadeInItems']")))
+    wait_dropdown_editors = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, "//div[@class='mat-menu-content ng-trigger ng-trigger-fadeInItems']")))
     print(Fore.GREEN + "Открыл выпадающий список для редактирования юзера")
 except TimeoutException:
     print(Fore.RED + "Не открыл выпадающий список для редактирования юзера")
@@ -154,7 +154,7 @@ except TimeoutException:
 
 #ожидание пока "Редактировать" станет доступной
 try:
-    edit_wait = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//span[contains(text(),'Редактировать')]")))
+    edit_wait = WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, "//span[contains(text(),'Редактировать')]")))
     time.sleep(0.75)
     edit_button = driver.find_element(By.XPATH, "//span[contains(text(),'Редактировать')]")
     edit_button.click()
@@ -168,7 +168,7 @@ except TimeoutException:
 
 #ожидание открытия модального окна с данными для заполнения для нового юзера
 try:
-    new_user_popup_wait = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//body//app-root//app-editor-users//mat-card[1]")))
+    new_user_popup_wait = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, "//body//app-root//app-editor-users//mat-card[1]")))
     print(Fore.GREEN + "Открыл окно с добавлением данных о новом юзере")
 except TimeoutException:
     print(Fore.RED + "Окно с добавлением данных о новом юзере не открылось")
@@ -193,7 +193,7 @@ edit_user_name.send_keys(edited_user_name)
 
 #ожидание открытия выпадающего списка
 try:
-    wait_dropdown_role = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//div[@class='cdk-overlay-pane']")))
+    wait_dropdown_role = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, "//div[@class='cdk-overlay-pane']")))
     print(Fore.GREEN + "Выпадающий список с ролями открылся")
 #    time.sleep(0.7)
 except TimeoutException:
@@ -208,7 +208,7 @@ dropdown_new_role.click()
 
 #ожидание пока кнопка админ станет доступной
 try:
-    wait_new_role = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//span[normalize-space()='Admin']")))
+    wait_new_role = WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, "//span[normalize-space()='Admin']")))
     choose_new_role = driver.find_element(By.XPATH, "//span[normalize-space()='Admin']")
     choose_new_role.click()
 except TimeoutException:
@@ -221,10 +221,55 @@ save_new_info.click()
 
 #проверка на появление уведомления после создания + его закрытия, для прохождения дальнейших тестов
 try:
-    noty_message = WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.XPATH,"//snack-bar-container[@role='alert']")))
+    noty_message = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH,"//snack-bar-container[@role='alert']")))
     print(Fore.BLUE + "ipe-1381 Редактирование данных пользователя - ПРОЙДЕН")
     close_noty = driver.find_element(By.XPATH, "//button[contains(text(),'Закрыть')]")
     close_noty.click()
 except TimeoutException:
     print(Fore.RED + "Изменения не сохранились / Не появилось уведомление")
 
+
+
+dropdown_edit_user = driver.find_element(By.XPATH, "//body[1]/app-root[1]/div[2]/app-dashboard[1]/app-editor-users[1]/div[1]/div[2]/div[1]/div[1]/mat-card[1]/div[1]/div[3]/button[1]/span[1]/mat-icon[1]")
+dropdown_edit_user.click()
+
+#ожидание прогрузки выпадающего списка с редактированием информации о юзере
+try:
+    wait_dropdown_editors = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, "//div[@class='mat-menu-content ng-trigger ng-trigger-fadeInItems']")))
+    print(Fore.GREEN + "Открыл выпадающий список для редактирования юзера")
+except TimeoutException:
+    print(Fore.RED + "Не открыл выпадающий список для редактирования юзера")
+    driver.quit()
+
+#ожидание пока "Редактировать" станет доступной
+try:
+    edit_wait = WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, "//span[contains(text(),'Редактировать')]")))
+    time.sleep(0.75)
+    edit_button = driver.find_element(By.XPATH, "//span[contains(text(),'Удалить')]")
+    edit_button.click()
+except TimeoutException:
+    print(Fore.RED + "Не смог выбрать из выпадающего списка кнопку 'Удалить'")
+    driver.quit()
+
+
+try:
+    warning_message = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, "//app-dialog[@class='ng-star-inserted']")))
+    print(Fore.GREEN + "Предупреждение 'Удаление пользователя. Подтвердите удаление пользователя ... появилось'")
+    time.sleep(0.5)
+except TimeoutException:
+    print(Fore.RED + "Предупреждение при удалении не появилось")
+    driver.quit()
+
+
+accept_delete_user = driver.find_element(By.XPATH, "//span[contains(text(),'Подтвердить')]")
+accept_delete_user.click()
+
+
+try:
+    noty_message = WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.XPATH,"//snack-bar-container[@role='alert']")))
+    print(Fore.BLUE + "ipe-1382 Удаление пользователя - ПРОЙДЕН")
+    close_noty = driver.find_element(By.XPATH, "//button[contains(text(),'Закрыть')]")
+    close_noty.click()
+except TimeoutException:
+    print(Fore.RED + "Удаление не произошло / Не появилось уведомление")
+time.sleep(2)
