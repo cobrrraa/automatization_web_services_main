@@ -16,6 +16,8 @@ from colorama import init, Fore, Back, Style
 
 delay = 1 #пока что на всякий случай как костыль в некоторых шагах
 delay = 2
+
+123
 driver = (webdriver.Chrome())
 driver.get('http://192.168.10.237:7000/SerenityNew/#/')
 chrome_options = Options()
