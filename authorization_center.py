@@ -352,10 +352,30 @@ except TimeoutException:
     driver.quit()
 
 
-choose_mng_role = driver.find_element(By.XPATH, "//span[normalize-space()='AllReadRole']")
-choose_mng_role.click()
 
-time.sleep(0.5) #добавить проверку..
+try:
+    mng_roles_wait = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, "//div[@class='manage-roles']")))
+    print(Fore.GREEN + "Список ролей открылся")
+except TimeoutException:
+    print(Fore.RED + "Список ролей не открылся")
+
+
+#исправить
+try:
+    allread_role_wait = WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, "//span[normalize-space()='AllReadRole']")))
+    choose_mng_role = driver.find_element(By.XPATH, "//span[normalize-space()='AllReadRole']")
+    choose_mng_role.click()
+    print(Fore.GREEN + "23")
+except TimeoutException:
+    print(Fore.RED + "----")
+
+#исправить
+#try:
+    #    save_wait = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, "//mat-list[@class='container mat-list ng-star-inserted']//div[@class='mat-list-item-content']")))
+#    print("element located")
+#except TimeoutException:
+#    print("element not located")
+
 
 save_mng_role = driver.find_element(By.XPATH, "//span[contains(text(),'Сохранить')]")
 save_mng_role.click()
