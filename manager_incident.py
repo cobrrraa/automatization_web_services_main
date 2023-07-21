@@ -1,17 +1,19 @@
-import time  # для юзания дилея при открытии вебокон
-from selenium.webdriver.common.by import By  # для поиска by
-from selenium.webdriver import Keys
+import time  # для отладки
+
+from colorama import Fore
 from selenium import webdriver
-from selenium.webdriver.common.action_chains import ActionChains
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import TimeoutException
+from selenium.webdriver import Keys
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.by import By  # для поиска by
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
+
 from information import serenity, login, password, firefly, task_fio, task_phone, task_address, task_language, \
     coordinates, question_text, edited_name_reglament, new_name_question, name_of_new_reglament, name_of_new_task, \
     edited_name_task
-from colorama import init, Fore, Back, Style
-from selenium.common.exceptions import NoSuchElementException
 
 #   test number 41 (ipe-41: Открытие приложения)
 
@@ -23,25 +25,29 @@ driver.get('http://192.168.10.237:7000/index3D.html')
 chrome_options = Options()
 chrome_options.add_argument("--disable-extensions")
 driver.maximize_window()
-time.sleep(delay)
 
+# ожидание и открытие формы авторизации
+try:
+    wait_auth_form = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.ID, "settingsButton")))
+    # клик на кнопку настроек
+    settings_log_form = driver.find_element(By.ID, 'settingsButton')
+    settings_log_form.click()
+except TimeoutException:
+    print(Fore.RED + "Не смог открыть окно авторизации")
+    driver.quit()
 
-
-
-settings_log_form = driver.find_element(By.ID, 'settingsButton')  # клик на кнопку настроек
-settings_log_form.click()
-
-input_ipaddr = driver.find_element(By.ID, 'ip_address')  # заполнение поля айпи адрес
+# заполнение поля ip адрес
+input_ipaddr = driver.find_element(By.ID, 'ip_address')
 input_ipaddr.click()
-
 input_ipaddr.send_keys(serenity)
 
-input_login = driver.find_element(By.ID, 'id_username')  # заполнение поля логин
+# заполнение поля логин
+input_login = driver.find_element(By.ID, 'id_username')
 input_login.click()
-
 input_login.send_keys(login)
 
-input_password = driver.find_element(By.ID, 'id_password')  # заполнение поля пароль
+# заполнение поля пароль
+input_password = driver.find_element(By.ID, 'id_password')
 input_password.click()
 input_password.send_keys(password)
 
@@ -74,9 +80,10 @@ except TimeoutException:
     print(Fore.RED + "Планета не открылась")
     driver.quit()
 
-# поиск и клик на выпадающий список слева на панели НЕ РАБОТАЕТ))
+# поиск и клик на выпадающий список слева на панели НЕ РАБОТАЕТ
 try:
-    drop_down_wait = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, "//div[@id='sidenav-toggle']")))
+    drop_down_wait = WebDriverWait(driver, 60).until(
+        EC.element_to_be_clickable((By.XPATH, "//div[@id='sidenav-toggle']")))
     time.sleep(4)  # КАК ОТ ЭТОГО ИЗБАВИТЬСЯ????????????????????????????
 except TimeoutException:
     driver.quit()
@@ -129,7 +136,7 @@ resizeIframe();
 
 driver.execute_script(ipe_script)
 
-# поиск и переключение на iframe с менеджером происшествий + изменение размера менеджера проишествий
+# поиск и переключение на iframe с менеджером происшествий + изменение размера менеджера происшествий
 
 cardevent_script = """
 function resizeIframe() {
@@ -147,10 +154,9 @@ driver.execute_script(cardevent_script)
 iframe_cardevent = driver.find_element(By.XPATH, "//iframe[@class='nodrag']")
 driver.switch_to.frame(iframe_cardevent)
 
-
 try:
     main_page_wait = WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.ID, "drop-editors")))
-    # ожидание прогрузки главной страницы 60 секунд, если грузит раньше = выполняется дальше, не выполняется = выводит сообщ
+# ожидание прогрузки главной страницы 60 секунд, если грузит раньше = выполняется дальше, не выполняется = выводит сообщ
     print(Fore.BLUE + "Test case 'ipe-41: Открытие приложения' -  ПРОЙДЕНО")
 except TimeoutException:
     print(Fore.RED + "x")
@@ -158,17 +164,19 @@ except TimeoutException:
 
 # test number 42 (ipe-42: Добавление регламента инцидента)
 
-settings_main_form = driver.find_element(By.XPATH, "//button[@id='drop-editors']//span[@class='mat-button-wrapper']")  # клик на шестеренку
+# клик на шестеренку
+settings_main_form = driver.find_element(By.XPATH,
+                                         "//button[@id='drop-editors']//span[@class='mat-button-wrapper']")
 settings_main_form.click()
 
 try:
-    wait_forclick_editorRegl = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, "//span[contains(text(),'Редактор регламентов инцидентов')]")))
+    wait_forclick_editorRegl = WebDriverWait(driver, 60).until(
+        EC.element_to_be_clickable((By.XPATH, "//span[contains(text(),'Редактор регламентов инцидентов')]")))
     editor_reglament = driver.find_element(By.XPATH, "//span[contains(text(),'Редактор регламентов инцидентов')]")
     editor_reglament.click()
 except TimeoutException:
     print(Fore.RED + "Не смог нажать на 'Редактор регламентов инцидентов'")
     driver.quit()
-
 
 #
 new_reg_editor_main_page = driver.find_element(By.XPATH, "//span[contains(text(),'Регламенты инцидентов')]")
@@ -179,20 +187,23 @@ else:
     print(Fore.RED + "Страница со всеми регламентами инцидентов не открыта")
     driver.quit()
 
-add_new_regl = driver.find_element(By.XPATH, "//span[contains(text(),'Добавить регламент')]")  # клик на кнопку "Добавить регламент"
+# клик на кнопку "Добавить регламент"
+add_new_regl = driver.find_element(By.XPATH,
+                                   "//span[contains(text(),'Добавить регламент')]")
 add_new_regl.click()
 
-#проверка на то где нахожусь
-new_reg_editor_page = driver.find_element(By.XPATH,"//div[@class='f-r-q-card f-r-q-editor ng-star-inserted']//div[1]")
+# проверка на то где нахожусь
+new_reg_editor_page = driver.find_element(By.XPATH, "//div[@class='f-r-q-card f-r-q-editor ng-star-inserted']//div[1]")
 if new_reg_editor_page.text == "Редактор вопросов":
     print(Fore.GREEN + "Страница с добавлением нового регламента инцидента открыта")
 else:
     print(Fore.RED + "Страница с добавлением нового регламента инцидента не открыта")
     driver.quit()
 
-#поиск и клик на категорию регламента
+# поиск и клик на категорию регламента
 try:
-    wait_forclick_type = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, "//div[@mattooltip='Категория регламента']")))
+    wait_forclick_type = WebDriverWait(driver, 60).until(
+        EC.element_to_be_clickable((By.XPATH, "//div[@mattooltip='Категория регламента']")))
     type_of_incident = driver.find_element(By.XPATH, "//div[@mattooltip='Категория регламента']")
     type_of_incident.click()
     print(Fore.GREEN + "Окно 'Категория регламентов' открылось")
@@ -200,35 +211,25 @@ except TimeoutException:
     print(Fore.RED + "Окно 'Категория регламентов' не открылось")
     driver.quit()
 
-
-#проверка, что модальное окно с выбором категории открылось
-modal_typeIncident = driver.find_element(By.XPATH, "//mat-dialog-container[@aria-modal='true']")
-if modal_typeIncident.is_displayed():
-    print(Fore.GREEN + "Окно с выбором категории регламента открыто")
-else:
-    print(Fore.RED + "Окно с выбором категории регламента не открыто")
-    driver.quit()
-
-
-#выбор категории, можно заменить riots.png на любую другую
+# выбор категории, можно заменить riots.png на любую другую
 try:
-    wait_forclick_icon = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, "//img[@src='assets/img/icons/riots.png']")))
+    wait_forclick_icon = WebDriverWait(driver, 60).until(
+        EC.element_to_be_clickable((By.XPATH, "//img[@src='assets/img/icons/riots.png']")))
     choose_type_of_incident = driver.find_element(By.XPATH, "//img[@src='assets/img/icons/riots.png']")
     choose_type_of_incident.click()
 except TimeoutException:
     driver.quit()
 
-
-
-#сохранение категории регламента
+# сохранение категории регламента
 try:
-    wait_forclick_icon = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, "//button[@type='button']//span[@class='mat-button-wrapper'][contains(text(),'Сохранить')]")))
-    save_type_of_incident = driver.find_element(By.XPATH, "//button[@type='button']//span[@class='mat-button-wrapper'][contains(text(),'Сохранить')]")
+    wait_forclick_icon = WebDriverWait(driver, 60).until(EC.element_to_be_clickable(
+        (By.XPATH, "//button[@type='button']//span[@class='mat-button-wrapper'][contains(text(),'Сохранить')]")))
+    save_type_of_incident = driver.find_element(By.XPATH,
+                                                "//button[@type='button']//span[@class='mat-button-wrapper']["
+                                                "contains(text(),'Сохранить')]")
     save_type_of_incident.click()
 except TimeoutException:
     driver.quit()
-
-
 
 add_question = driver.find_element(By.XPATH, "//input[@id='mat-input-3'][1]")  # поиск и клик по инпуту в поле "Вопросы"
 add_question.click()
@@ -238,13 +239,19 @@ add_question.send_keys(question_text)
 type_of_question = driver.find_element(By.XPATH, "//span[contains(text(),'В каком формате должен быть ответ?')]")
 type_of_question.click()
 
-text_type = driver.find_element(By.XPATH, "//span[contains(text(),'Текстовый')]")
-text_type.click()
+try:
+    wait_forclick_type = WebDriverWait(driver, 60).until(
+        EC.element_to_be_clickable((By.XPATH, "//span[contains(text(),'Текстовый')]")))
+    text_type = driver.find_element(By.XPATH, "//span[contains(text(),'Текстовый')]")
+    text_type.click()
+except TimeoutException:
+    print(Fore.RED + "Не открыл выпадающий список с выбором типа вопроса")
+    driver.quit()
 
 # выпадающий список "группы для просмотра
 groups_can_see = driver.find_element(By.XPATH, "//span[contains(text(),'Какие Группы необходимо назначить?')]")
 groups_can_see.click()
-
+time.sleep(delay)
 
 try:
     wait_forclick_groupsSEE = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, "//mat-option[1]")))
@@ -252,7 +259,7 @@ except TimeoutException:
     print(Fore.RED + "Выпадающий список в 'Группы для просмотра' не открылся")
     driver.quit()
 
-# как то засунуть по другому + проверка, что элементы выбрался
+# выбор групп которые могут смотреть
 choose_group1_see = driver.find_element(By.XPATH, "//span[contains(text(),'Группа 1')]")
 choose_group1_see.click()
 
@@ -265,6 +272,7 @@ choose_group3_see.click()
 choose_group4_see = driver.find_element(By.XPATH, "//span[contains(text(),'Группа 4')]")
 choose_group4_see.click()
 
+# клик escape - чтобы выйти из выпадающего списка
 webdriver.ActionChains(driver).send_keys(Keys.ESCAPE).perform()
 # кажется незаменимо))
 time.sleep(0.5)
@@ -273,32 +281,52 @@ time.sleep(0.5)
 groups_can_edit = driver.find_element(By.XPATH, "//span[contains(text(),'Кто может изменять вопрос?')]")
 groups_can_edit.click()
 
-
+#
 try:
-    wait_forclick_groupsEDIT = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, "//span[contains(text(),'Выбрать все')]")))
+    wait_forclick_groupsEDIT = WebDriverWait(driver, 60).until(
+        EC.element_to_be_clickable((By.XPATH, "//span[contains(text(),'Выбрать все')]")))
     choose_group_edit = driver.find_element(By.XPATH, "//span[contains(text(),'Выбрать все')]")
     choose_group_edit.click()
 except TimeoutException:
     print(Fore.RED + "Выпадающий список в 'Группы для редактирования' не открылся")
     driver.quit()
 
-
+# клик escape - чтобы выйти из выпадающего списка
 webdriver.ActionChains(driver).send_keys(Keys.ESCAPE).perform()
 # кажется незаменимо))
 time.sleep(0.5)
 
-#исправить!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+# заполнение названия регламента
 def fill_nameOfReglament():
-    name_of_new_reg = driver.find_element(By.XPATH, "//input[@placeholder='Название регламента']")
-    time.sleep(delay)
-    name_of_new_reg.click()
-    name_of_new_reg.clear()
-    name_of_new_reg.send_keys(name_of_new_reglament)
-    time.sleep(0.5)
-    save_new_reglament = driver.find_element(By.XPATH, "//span[contains(text(),'Сохранить регламент')]")
-    time.sleep(0.5)
-    save_new_reglament.click()
-    time.sleep(0.5)
+    try:
+        WebDriverWait(driver, 60).until(
+            EC.element_to_be_clickable((By.XPATH, "//input[@placeholder='Название регламента']")))
+        name_of_new_reg = driver.find_element(By.XPATH, "//input[@placeholder='Название регламента']")
+        name_of_new_reg.click()
+        name_of_new_reg.clear()
+        name_of_new_reg.send_keys(name_of_new_reglament)
+
+    except TimeoutException:
+        print("Не смог нажать на инпут с названием регламента")
+        driver.quit()
+
+    try:
+        WebDriverWait(driver, 60).until(
+            EC.element_to_be_clickable((By.XPATH, "//span[contains(text(),'Сохранить регламент')]")))
+        save_new_reglament = driver.find_element(By.XPATH, "//span[contains(text(),'Сохранить регламент')]")
+        save_new_reglament.click()
+        time.sleep(1)  # тоже хз что делать с этим
+    except TimeoutException:
+        print("Не смог нажать на кнопку сохранения регламента")
+        driver.quit()
+
+
+# try:
+# noty_wait = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, "//div[@class='noty_message']")))
+# except TimeoutException:
+# print("123")
+
 
 def check_notifications():
     try:
@@ -326,8 +354,8 @@ while counter <= max_attempts:
             print(f"Задача с названием '{name_of_new_reglament}' успешно добавлена.")
             print(Fore.GREEN + "Уведомление 'Данные успешно сохранены' появилось")
             print(Fore.BLUE + "Test case 'ipe-42  Добавление регламента инцидента' - ПРОЙДЕНО")
-            close_noty = driver.find_element(By.XPATH, "//div[@class='noty_close']")  # noty_close
-            close_noty.click()
+            # close_noty = driver.find_element(By.XPATH, "//div[@class='noty_close']")  # noty_close
+            # close_noty.click()
             break
         elif result == "exists":
             print(f"Ошибка: Задача с названием '{name_of_new_reglament}' уже существует.")
@@ -338,7 +366,7 @@ while counter <= max_attempts:
             name_of_new_reg.clear()
             counter += 1
         else:
-            print("Уведомление не найдено.")
+            print(Fore.RED + "Уведомление не найдено.")
             driver.quit()
             break
     except TimeoutException:
@@ -346,48 +374,51 @@ while counter <= max_attempts:
         driver.quit()
         break
     except Exception as e:
-        print(f"Произошла ошибка: {e}")
+        print(Fore.RED + f"Произошла ошибка: {e}")
         driver.quit()
         break
 else:
-    print("Достигнуто максимальное количество попыток. Тест не может быть завершен.")
+    print(Fore.RED + "Достигнуто максимальное количество попыток. Тест не может быть завершен.")
+
+# исправить на нормальное ожидание
 
 
-
-
-time.sleep(2) #исправить на нормальное ожидание
-
-
-
+try:
+    journal_wait = WebDriverWait(driver, 60).until(
+        EC.presence_of_element_located((By.XPATH, "//span[contains(text(),'Регламенты инцидентов')]")))
+except TimeoutException:
+    print("не вышел из страницы")
+    driver.quit()
 
 # test number 44 (ipe-44: Редактирование  регламента инцидента)
-
 
 edit_new_reg_editor_page = driver.find_element(By.XPATH, "(//h3[normalize-space()='autotest1 [test_sofa]'])[1]")
 edit_new_reg_editor_page.click()
 
-new_reg_editor_page = driver.find_element(By.XPATH, "//div[@class='f-r-q-card f-r-q-editor ng-star-inserted']//div[1]")
-if new_reg_editor_page.text == "Редактор вопросов":
-    print(Fore.GREEN + "Страница редактирования регламента инцидента открыта")
-else:
-    print(Fore.RED + "Страница редактирования регламента инцидента не открыта")
+try:
+    wait_editorRegl = WebDriverWait(driver, 60).until(
+        EC.presence_of_element_located((By.XPATH, "//span[contains(text(),'Регламент инцидента')]")))
+    print(Fore.GREEN + "Открыл страницу редактирования регламента")
+except TimeoutException:
+    print(Fore.RED + "Не открыл страницу редактирования регламента")
     driver.quit()
-
 
 add_question = driver.find_element(By.XPATH, "//input[@type='text']")  # поиск и клик по инпуту в поле "Вопросы"
 add_question.click()
 add_question.clear()
 add_question.send_keys(new_name_question)
 
-
 type_of_question = driver.find_element(By.XPATH, "//mat-select[@placeholder='В каком формате должен быть ответ?']")
 type_of_question.click()
-
-time.sleep(delay)
-
-text_type = driver.find_element(By.XPATH, "//span[contains(text(),'Числовой')]")
-text_type.click()
-time.sleep(delay)
+# ожидание на появление выпадающего списка в "тип вопроса"
+try:
+    wait_forclick_type = WebDriverWait(driver, 60).until(
+        EC.element_to_be_clickable((By.XPATH, "//span[contains(text(),'Числовой')]")))
+    text_type = driver.find_element(By.XPATH, "//span[contains(text(),'Числовой')]")
+    text_type.click()
+except TimeoutException:
+    print(Fore.RED + "Не открыл выпадающий список с выбором типа вопроса")
+    driver.quit()
 
 question_block = driver.find_element(By.XPATH, "//mat-select[@placeholder='К какому блоку относится вопрос?']")
 question_block.click()
@@ -395,22 +426,29 @@ time.sleep(delay)
 choose_block1 = driver.find_element(By.XPATH, "//span[@class='mat-option-text'][contains(text(),'Блок 1')]")
 choose_block1.click()
 
-time.sleep(3)
-
-
-#test
 
 def rename_nameOfReglament():
-    edited_name_reg = driver.find_element(By.XPATH, "//input[@placeholder='Название регламента']")
-    time.sleep(delay)
-    edited_name_reg.click()
-    edited_name_reg.clear()
-    edited_name_reg.send_keys(edited_name_reglament)
-    time.sleep(0.5)
-    save_new_reglament = driver.find_element(By.XPATH, "//span[contains(text(),'Сохранить регламент')]")
-    time.sleep(0.5)
-    save_new_reglament.click()
-    time.sleep(0.5)
+    try:
+        WebDriverWait(driver, 60).until(
+            EC.element_to_be_clickable((By.XPATH, "//input[@placeholder='Название регламента']")))
+        edited_name_reg = driver.find_element(By.XPATH, "//input[@placeholder='Название регламента']")
+        edited_name_reg.click()
+        edited_name_reg.clear()
+        edited_name_reg.send_keys(edited_name_reglament)
+    except TimeoutException:
+        print("Не смог нажать на инпут с названием регламента")
+        driver.quit()
+
+    try:
+        WebDriverWait(driver, 60).until(
+            EC.element_to_be_clickable((By.XPATH, "//span[contains(text(),'Сохранить регламент')]")))
+        save_new_reglament = driver.find_element(By.XPATH, "//span[contains(text(),'Сохранить регламент')]")
+        save_new_reglament.click()
+        time.sleep(1)  # тоже хз что делать с этим
+    except TimeoutException:
+        print("Не смог нажать на кнопку сохранения регламента")
+        driver.quit()
+
 
 def check_notifications():
     try:
@@ -438,8 +476,8 @@ while counter <= max_attempts:
             print(f"Задача с названием '{edited_name_reglament}' успешно добавлена.")
             print(Fore.GREEN + "Уведомление 'Данные успешно сохранены' появилось")
             print(Fore.BLUE + "Test case 'ipe-43  Редактирование регламента инцидента' - ПРОЙДЕНО")
-            close_noty = driver.find_element(By.XPATH, "//div[@class='noty_close']")  # noty_close
-            close_noty.click()
+            # close_noty = driver.find_element(By.XPATH, "//div[@class='noty_close']")  # noty_close
+            # close_noty.click()
             break
         elif result == "exists":
             print(f"Ошибка: Задача с названием '{edited_name_reglament}' уже существует.")
@@ -464,13 +502,10 @@ while counter <= max_attempts:
 else:
     print("Достигнуто максимальное количество попыток. Тест не может быть завершен.")
 
-
-
     # test number 43 (ipe-43: Добавление регламента задачи)
 
-# добавить авторизацию + переход после написания
-
-settings_main_form = driver.find_element(By.XPATH, "//button[@id='drop-editors']//span[@class='mat-button-wrapper']")  # клик на шестеренку
+# клик на шестеренку
+settings_main_form = driver.find_element(By.XPATH, "//button[@id='drop-editors']//span[@class='mat-button-wrapper']")
 settings_main_form.click()
 time.sleep(delay)
 
@@ -619,7 +654,8 @@ go_to_mainpage = driver.find_element(By.XPATH, "//span[contains(text(),'Журн
 go_to_mainpage.click()
 
 try:
-    add_new_incident = WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH, "//span[contains(text(),'Добавить инцидент')]")))
+    add_new_incident = WebDriverWait(driver, 60).until(
+        EC.presence_of_element_located((By.XPATH, "//span[contains(text(),'Добавить инцидент')]")))
     add_new_incident.click()
     print(Fore.GREEN + "Перешел на основную страницу")
 
@@ -645,7 +681,8 @@ time.sleep(5)
 
 # ожидание открытия бокового окна
 try:
-    wait_window_with_incident = WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH, "//span[contains(text(),'В работе у: Вас')]")))
+    wait_window_with_incident = WebDriverWait(driver, 60).until(
+        EC.presence_of_element_located((By.XPATH, "//span[contains(text(),'В работе у: Вас')]")))
     print(Fore.GREEN + "Добавил новый инцидент, открылся блок 1")
 
 except TimeoutException:
@@ -653,7 +690,8 @@ except TimeoutException:
     driver.quit()
 
 try:
-    noty_message_check = WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH, "//div[@class='noty_message']")))
+    noty_message_check = WebDriverWait(driver, 60).until(
+        EC.presence_of_element_located((By.XPATH, "//div[@class='noty_message']")))
     print(Fore.GREEN + "Уведомление 'Данные успешно сохранены' появилось")
     print(Fore.BLUE + "Test case 'ipe-46  Добавление инцидента' - ПРОЙДЕНО")
     close_noty = driver.find_element(By.XPATH, "//div[@class='noty_close']")  # noty_close
@@ -710,7 +748,8 @@ choose_type_of_new_task = driver.find_element(By.XPATH, "(//span[normalize-space
 choose_type_of_new_task.click()
 
 try:
-    choose_performers = WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH, "//input[@placeholder='Исполнители']")))
+    choose_performers = WebDriverWait(driver, 60).until(
+        EC.presence_of_element_located((By.XPATH, "//input[@placeholder='Исполнители']")))
     choose_performers.click()
     time.sleep(delay)
     choose_performers_checkbox1 = driver.find_element(By.XPATH, "(//span[@class='mat-option-text'])[1]")
@@ -750,7 +789,8 @@ add_coordinates.click()
 add_coordinates.clear()
 add_coordinates.send_keys(coordinates)
 
-back_to_main_page = driver.find_element(By.XPATH,"//button[@class='icon pass-button mat-mini-fab mat-button-base mat-accent']//span[@class='mat-button-wrapper']")
+back_to_main_page = driver.find_element(By.XPATH,
+                                        "//button[@class='icon pass-button mat-mini-fab mat-button-base mat-accent']//span[@class='mat-button-wrapper']")
 back_to_main_page.click()
 
 # check
@@ -765,7 +805,7 @@ try:
     print(Fore.GREEN + "Координаты у инцидента сохранились")
     print(Fore.BLUE + "Test case 'ipe-48  Установка координат инциденту' - ПРОЙДЕНО")
     time.sleep(2)
-except:
+except TimeoutException:
     print(Fore.RED + "Координаты у инцидента не сохранились")
     driver.quit()
 
