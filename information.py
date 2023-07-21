@@ -22,7 +22,7 @@ question_text = "У меня текстовый вопрос"
 name_of_new_reglament ="autotest"
 
 #текст у измененного регламента (вводится при редактировании
-new_name_reglament = "edited_autotest"
+edited_name_reglament = "edited_autotest"
 
 #текст в редактируемом регламенте в таблице "вопросы"
 new_name_question = "У меня отредактированный текстовый вопрос"
