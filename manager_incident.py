@@ -610,7 +610,8 @@ except TimeoutException:
 
 def fill_nameOfTask():
     try:
-        WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, "//input[@placeholder='Название регламента']")))
+        WebDriverWait(driver, 60).until(
+            EC.element_to_be_clickable((By.XPATH, "//input[@placeholder='Название регламента']")))
         name_of_newReglTask = driver.find_element(By.XPATH, "//input[@placeholder='Название регламента']")
         name_of_newReglTask.click()
         name_of_newReglTask.clear()
@@ -813,7 +814,7 @@ while counter <= max_attempts:
             counter += 1
         else:
             # print("Уведомление не найдено.")
-# VERY IMPORTANT: пока прописан PASS - т.к не появляется уведомление при редактировании - есть задача, заменить после фикса задачи
+            # VERY IMPORTANT: пока прописан PASS - т.к не появляется уведомление при редактировании - есть задача, заменить после фикса задачи
             pass
             break
     except TimeoutException:
@@ -827,15 +828,14 @@ while counter <= max_attempts:
 else:
     print("Достигнуто максимальное количество попыток. Тест не может быть завершен.")
 
-
 try:
-    homepage_button = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, "//span[contains(text(),'Журнал событий')]")))
+    homepage_button = WebDriverWait(driver, 60).until(
+        EC.element_to_be_clickable((By.XPATH, "//span[contains(text(),'Журнал событий')]")))
     go_to_mainpage = driver.find_element(By.XPATH, "//span[contains(text(),'Журнал событий')]")
     go_to_mainpage.click()
 except TimeoutException:
     print(Fore.RED + "Кнопка для перехода на главную страницу недоступна/переход не произошел")
     driver.quit()
-
 
 try:
     add_new_incident = WebDriverWait(driver, 60).until(
@@ -854,9 +854,9 @@ except TimeoutException:
     print(Fore.RED + "Не открыл страницу 'Добавить инцидент'")
     driver.quit()
 
-
 try:
-    wait_dropdown_typeIncident = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, "//span[normalize-space()='edited_autotest1']")))
+    wait_dropdown_typeIncident = WebDriverWait(driver, 60).until(
+        EC.element_to_be_clickable((By.XPATH, "//span[normalize-space()='edited_autotest1']")))
     choose_type_of_new_incident = driver.find_element(By.XPATH, "//span[normalize-space()='edited_autotest1']")
     choose_type_of_new_incident.click()
     print(Fore.GREEN + "Открыл страницу для добавления нового инцидента и выбрал регламент")
@@ -866,7 +866,6 @@ except TimeoutException:
 
 click_on_plus_incident = driver.find_element(By.XPATH, "//mat-icon[normalize-space()='add']")
 click_on_plus_incident.click()
-
 
 try:
     wait_window_with_incident = WebDriverWait(driver, 60).until(
@@ -885,7 +884,8 @@ try:
     close_noty = driver.find_element(By.XPATH, "//div[@class='noty_close']")  # noty_close
     close_noty.click()
     try:
-        notification = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//div[@class='noty_message']")))
+        notification = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.XPATH, "//div[@class='noty_message']")))
         while True:
             try:
                 notification.is_displayed()
@@ -902,7 +902,8 @@ go_to_mainpage = driver.find_element(By.XPATH, "//span[contains(text(),'Журн
 go_to_mainpage.click()
 
 try:
-    request_for_TO = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, "//span[contains(text(),'Заявка на ТО')]")))
+    request_for_TO = WebDriverWait(driver, 60).until(
+        EC.element_to_be_clickable((By.XPATH, "//span[contains(text(),'Заявка на ТО')]")))
     request_for_TO.click()
     print(Fore.GREEN + "Перешел на основную страницу")
 except TimeoutException:
@@ -930,18 +931,19 @@ input_address.send_keys(task_address)
 input_language = driver.find_element(By.XPATH, "//input[@placeholder='Язык заявителя']")
 input_language.send_keys(task_language)
 
-
 try:
-    WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, "//div[@aria-hidden='true']//div//span[contains(text(),'Тип задачи')]")))
-    open_type_of_new_task = driver.find_element(By.XPATH, "//div[@aria-hidden='true']//div//span[contains(text(),'Тип задачи')]")
+    WebDriverWait(driver, 60).until(
+        EC.element_to_be_clickable((By.XPATH, "//div[@aria-hidden='true']//div//span[contains(text(),'Тип задачи')]")))
+    open_type_of_new_task = driver.find_element(By.XPATH,
+                                                "//div[@aria-hidden='true']//div//span[contains(text(),'Тип задачи')]")
     open_type_of_new_task.click()
 except TimeoutException:
     print(Fore.RED + "Не смог открыть выпадающий список 'Тип задачи'")
     driver.quit()
 
-
 try:
-    WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, "//span[normalize-space()='edited_autotest_task1']")))
+    WebDriverWait(driver, 60).until(
+        EC.element_to_be_clickable((By.XPATH, "//span[normalize-space()='edited_autotest_task1']")))
     choose_type_of_new_task = driver.find_element(By.XPATH, "//span[normalize-space()='edited_autotest_task1']")
     choose_type_of_new_task.click()
 except TimeoutException:
@@ -949,14 +951,16 @@ except TimeoutException:
     driver.quit()
 
 try:
-    choose_performers = WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH, "//input[@placeholder='Исполнители']")))
+    choose_performers = WebDriverWait(driver, 60).until(
+        EC.presence_of_element_located((By.XPATH, "//input[@placeholder='Исполнители']")))
     choose_performers.click()
 except TimeoutException:
     driver.quit()
 
 try:
     WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, "//div[normalize-space()='admin']")))
-    choose_performers_checkbox = driver.find_element(By.XPATH, "//body/div/div[@dir='ltr']/div/div[@role='listbox']/mat-option[1]/span[1]")
+    choose_performers_checkbox = driver.find_element(By.XPATH,
+                                                     "//body/div/div[@dir='ltr']/div/div[@role='listbox']/mat-option[1]/span[1]")
     choose_performers_checkbox.click()
 except TimeoutException:
     print(Fore.RED + "Не смог прокликать поле 'Исполнители'")
@@ -990,7 +994,8 @@ except TimeoutException:
     driver.quit()
 
 try:
-    noty_message_check = WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH, "//div[@class='noty_message']")))
+    noty_message_check = WebDriverWait(driver, 60).until(
+        EC.presence_of_element_located((By.XPATH, "//div[@class='noty_message']")))
     print(Fore.GREEN + "Уведомление 'Данные успешно сохранены' появилось")
     print(Fore.BLUE + "Test case 'ipe-47  Добавление задачи' - ПРОЙДЕНО")
     close_noty = driver.find_element(By.XPATH, "//div[@class='noty_close']")  # noty_close
@@ -1000,7 +1005,8 @@ except TimeoutException:
     driver.quit()
 
 try:
-    open_incident = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, "(//mat-cell[contains(text(),'Массовые беспорядки')])[1]")))
+    open_incident = WebDriverWait(driver, 60).until(
+        EC.element_to_be_clickable((By.XPATH, "(//mat-cell[contains(text(),'Массовые беспорядки')])[1]")))
     action.double_click(open_incident).perform()
 except TimeoutException:
     driver.quit()
@@ -1011,7 +1017,8 @@ except TimeoutException:
     driver.quit()
 
 try:
-    WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, "//input[@placeholder='Координаты инцидента']")))
+    WebDriverWait(driver, 60).until(
+        EC.element_to_be_clickable((By.XPATH, "//input[@placeholder='Координаты инцидента']")))
     # добавление координат инциденту
     add_coordinates = driver.find_element(By.XPATH, "//input[@placeholder='Координаты инцидента']")
     add_coordinates.click()
@@ -1020,7 +1027,6 @@ try:
     print(Fore.BLUE + "У инцидента edited_autotest1 указал координаты 53.228425 50.199929")
 except TimeoutException:
     driver.quit()
-
 
 back_to_main_page = driver.find_element(By.XPATH, "//mat-icon[normalize-space()='home']")
 back_to_main_page.click()
@@ -1034,7 +1040,8 @@ except TimeoutException:
 
 # проверка координат
 try:
-    open_incident = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, "(//mat-cell[contains(text(),'Массовые беспорядки')])[1]")))
+    open_incident = WebDriverWait(driver, 60).until(
+        EC.element_to_be_clickable((By.XPATH, "(//mat-cell[contains(text(),'Массовые беспорядки')])[1]")))
     action.double_click(open_incident).perform()
 except TimeoutException:
     driver.quit()
@@ -1046,9 +1053,9 @@ except TimeoutException:
     driver.quit()
     print(Fore.RED + "Не открыл инцидент edited_autotest1")
 
-
 try:
-    add_coordinates = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, "//input[@placeholder='Координаты инцидента']")))
+    add_coordinates = WebDriverWait(driver, 60).until(
+        EC.element_to_be_clickable((By.XPATH, "//input[@placeholder='Координаты инцидента']")))
     value_in_field = add_coordinates.get_attribute("value")
     expected_value = coordinates
 
@@ -1061,7 +1068,6 @@ try:
         driver.quit()
 except TimeoutException:
     driver.quit()
-
 
 # перелет к координатам пока не реализован в тонком клиенте - пока закоментил
 # go_home = driver.find_element(By.XPATH,"//mat-icon[normalize-space()='home']")
