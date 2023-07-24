@@ -1,5 +1,4 @@
 import time  # для отладки
-
 from colorama import Fore
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
@@ -19,7 +18,6 @@ from information import serenity, login, password, firefly, task_fio, task_phone
 
 # добавлен на всякий случай и вставлен в некоторых местах - чисто на всякий случай.
 delay = 1
-
 driver = (webdriver.Chrome())
 driver.get('http://192.168.10.237:7000/index3D.html')
 chrome_options = Options()
@@ -346,6 +344,8 @@ while counter <= max_attempts:
         result = check_notifications()
         if result == "success":
             print(f"Задача с названием '{name_of_new_reglament}' успешно добавлена.")
+            print(Fore.GREEN + "Уведомление 'Данные успешно сохранены' появилось")
+            print(Fore.BLUE + "Test case 'ipe-42  Добавление регламента инцидента' - ПРОЙДЕНО")
             try:
                 notification = WebDriverWait(driver, 10).until(
                     EC.presence_of_element_located((By.XPATH, "//div[@class='noty_message']")))
@@ -354,8 +354,7 @@ while counter <= max_attempts:
                     try:
                         notification.is_displayed()  # Проверяем, видим ли элемент
                         time.sleep(3)
-                        print(Fore.GREEN + "Уведомление 'Данные успешно сохранены' появилось")
-                        print(Fore.BLUE + "Test case 'ipe-42  Добавление регламента инцидента' - ПРОЙДЕНО")
+
                     except:
                         break  # Если элемент не видим, выходим из цикла
                     time.sleep(1)  # Если элемент видим, ждем 1 секунду и повторяем проверку
@@ -373,7 +372,7 @@ while counter <= max_attempts:
             name_of_new_reg.clear()
             counter += 1
         else:
-            print(Fore.RED + "Уведомление не найдено.")
+            # print(Fore.RED + "Уведомление не найдено.")
             driver.quit()
             break
     except TimeoutException:
@@ -487,7 +486,7 @@ while counter <= max_attempts:
                         notification.is_displayed()  # Проверяем, видим ли элемент
                         time.sleep(3)
                         print(Fore.GREEN + "Уведомление 'Данные успешно сохранены' появилось")
-                        print(Fore.BLUE + "Test case 'ipe-43  Редактирование регламента инцидента' - ПРОЙДЕНО")
+                        print(Fore.BLUE + "Test case 'ipe-44  Редактирование регламента инцидента' - ПРОЙДЕНО")
                     except:
                         break  # Если элемент не видим, выходим из цикла
                     time.sleep(1)  # Если элемент видим, ждем 1 секунду и повторяем проверку
@@ -503,7 +502,7 @@ while counter <= max_attempts:
             edited_name_reg.clear()
             counter += 1
         else:
-            print("Уведомление не найдено.")
+            # print("Уведомление не найдено.")
             driver.quit()
             break
     except TimeoutException:
@@ -611,8 +610,7 @@ except TimeoutException:
 
 def fill_nameOfTask():
     try:
-        WebDriverWait(driver, 60).until(
-            EC.element_to_be_clickable((By.XPATH, "//input[@placeholder='Название регламента']")))
+        WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, "//input[@placeholder='Название регламента']")))
         name_of_newReglTask = driver.find_element(By.XPATH, "//input[@placeholder='Название регламента']")
         name_of_newReglTask.click()
         name_of_newReglTask.clear()
@@ -655,6 +653,8 @@ while counter <= max_attempts:
         result = check_notifications()
         if result == "success":
             print(f"Задача с названием '{name_of_new_task}' успешно добавлена.")
+            print(Fore.GREEN + "Уведомление 'Данные успешно сохранены' появилось")
+            print(Fore.BLUE + "Test case 'ipe-43  Добавление регламента задачи' - ПРОЙДЕНО")
             try:
                 notification = WebDriverWait(driver, 10).until(
                     EC.presence_of_element_located((By.XPATH, "//div[@class='noty_message']")))
@@ -662,8 +662,7 @@ while counter <= max_attempts:
                 while True:
                     try:
                         notification.is_displayed()  # Проверяем, видим ли элемент
-                        print(Fore.GREEN + "Уведомление 'Данные успешно сохранены' появилось")
-                        print(Fore.BLUE + "Test case 'ipe-43  Добавление регламента задачи' - ПРОЙДЕНО")
+                        time.sleep(3)
                     except:
                         break  # Если элемент не видим, выходим из цикла
                     time.sleep(1)  # Если элемент видим, ждем 1 секунду и повторяем проверку
@@ -679,7 +678,7 @@ while counter <= max_attempts:
             name_of_newReglTask.clear()
             counter += 1
         else:
-            print(Fore.RED + "Уведомление не найдено.")
+            # print("Уведомление не найдено.")
             driver.quit()
             break
     except TimeoutException:
@@ -813,10 +812,8 @@ while counter <= max_attempts:
             edited_name_reg.clear()
             counter += 1
         else:
-            print("Уведомление не найдено.")
-
+            # print("Уведомление не найдено.")
 # VERY IMPORTANT: пока прописан PASS - т.к не появляется уведомление при редактировании - есть задача, заменить после фикса задачи
-
             pass
             break
     except TimeoutException:
@@ -862,6 +859,7 @@ try:
     wait_dropdown_typeIncident = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, "//span[normalize-space()='edited_autotest1']")))
     choose_type_of_new_incident = driver.find_element(By.XPATH, "//span[normalize-space()='edited_autotest1']")
     choose_type_of_new_incident.click()
+    print(Fore.GREEN + "Открыл страницу для добавления нового инцидента и выбрал регламент")
 except TimeoutException:
     print(Fore.RED + "Не смог выбрать тип происшествия")
     driver.quit()
@@ -908,7 +906,7 @@ try:
     request_for_TO.click()
     print(Fore.GREEN + "Перешел на основную страницу")
 except TimeoutException:
-    print("Не перешел на основную страницу, не открыл страницу 'Заявка на ТО' ")
+    print(Fore.RED + "Не перешел на основную страницу, не открыл страницу 'Заявка на ТО' ")
     driver.quit()
 
 try:
@@ -968,9 +966,11 @@ webdriver.ActionChains(driver).send_keys(Keys.ESCAPE).perform()
 time.sleep(0.5)
 
 # //mat-icon[normalize-space()='clear'] - кнопка для скрытия этого уведомления
+
 # оффтоп - есть оранжевое уведомление, если открыты два одинаковых юзера и происходят какие-то изменения,
 # из-за этого тест падает в разные моменты времени(точно в 'Заявка на ТО', редактирование регламента инцидента) -
 # не уверен, что целесообразно писать в каждом разделе проверки на наличие этого окна, будет запрос - попытаюсь реализовать
+
 # что-то похожее, на реализацию этого
 # try:
 #     orange_notification = WebDriverWait(driver,2).until(EC.presence_of_element_located((By.XPATH, "//mat-icon[normalize-space()='clear']")))
@@ -1017,12 +1017,20 @@ try:
     add_coordinates.click()
     add_coordinates.clear()
     add_coordinates.send_keys(coordinates)
+    print(Fore.BLUE + "У инцидента edited_autotest1 указал координаты 53.228425 50.199929")
 except TimeoutException:
     driver.quit()
 
 
 back_to_main_page = driver.find_element(By.XPATH, "//mat-icon[normalize-space()='home']")
 back_to_main_page.click()
+
+try:
+    WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH, "//h3[contains(text(),'Все события')]")))
+    print(Fore.GREEN + "Открыл главную страницу")
+except TimeoutException:
+    print(Fore.RED + "Не открыл главную страницу")
+    driver.quit()
 
 # проверка координат
 try:
@@ -1033,8 +1041,10 @@ except TimeoutException:
 
 try:
     WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, "//mat-icon[normalize-space()='refresh']")))
+    print(Fore.GREEN + "Открыл инцидент edited_autotest1")
 except TimeoutException:
     driver.quit()
+    print(Fore.RED + "Не открыл инцидент edited_autotest1")
 
 
 try:
@@ -1044,7 +1054,8 @@ try:
 
     if value_in_field == expected_value:
         print(Fore.GREEN + "Координаты сохранились")
-        print(value_in_field)
+        print(Fore.BLUE + "ipe-48: Установка координат инциденту - ПРОЙДЕНО")
+        print(value_in_field + " -  Координаты в карточке инцидента")
     else:
         print(Fore.RED + "Координаты не сохранились")
         driver.quit()
