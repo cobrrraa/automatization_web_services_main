@@ -9,7 +9,6 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By  # для поиска by
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
-
 from information import serenity, login, password, firefly, task_fio, task_phone, task_address, task_language, \
     coordinates, question_text, edited_name_reglament, new_name_question, name_of_new_reglament, name_of_new_task, \
     edited_name_task
@@ -19,7 +18,8 @@ from information import serenity, login, password, firefly, task_fio, task_phone
 # добавлен на всякий случай и вставлен в некоторых местах - чисто на всякий случай.
 delay = 1
 driver = (webdriver.Chrome())
-driver.get('http://192.168.10.237:7000/index3D.html')
+#driver.get('http://192.168.10.237:7000/index3D.html')
+driver.get('http://192.168.11.32:81/index3D.html')
 chrome_options = Options()
 chrome_options.add_argument("--disable-extensions")
 driver.maximize_window()
@@ -83,7 +83,7 @@ except TimeoutException:
 try:
     drop_down_wait = WebDriverWait(driver, 60).until(
         EC.element_to_be_clickable((By.XPATH, "//div[@id='sidenav-toggle']")))
-    time.sleep(4)  # КАК ОТ ЭТОГО ИЗБАВИТЬСЯ????????????????????????????
+    time.sleep(6)  # КАК ОТ ЭТОГО ИЗБАВИТЬСЯ????????????????????????????
 except TimeoutException:
     driver.quit()
 
@@ -258,17 +258,8 @@ except TimeoutException:
     driver.quit()
 
 # выбор групп которые могут смотреть
-choose_group1_see = driver.find_element(By.XPATH, "//span[contains(text(),'Группа 1')]")
-choose_group1_see.click()
-
-choose_group2_see = driver.find_element(By.XPATH, "//span[contains(text(),'Группа 2')]")
-choose_group2_see.click()
-
-choose_group3_see = driver.find_element(By.XPATH, "//span[contains(text(),'Группа 3')]")
-choose_group3_see.click()
-
-choose_group4_see = driver.find_element(By.XPATH, "//span[contains(text(),'Группа 4')]")
-choose_group4_see.click()
+choose_groups_see = driver.find_element(By.XPATH, "//span[contains(text(),'Выбрать все')]")
+choose_groups_see.click()
 
 # клик escape - чтобы выйти из выпадающего списка
 webdriver.ActionChains(driver).send_keys(Keys.ESCAPE).perform()
@@ -306,7 +297,7 @@ def fill_nameOfReglament():
         name_of_new_reg.send_keys(name_of_new_reglament)
 
     except TimeoutException:
-        print("Не смог нажать на инпут с названием регламента")
+        print(Fore.RED + "Не смог нажать на инпут с названием регламента")
         driver.quit()
 
     try:
@@ -316,7 +307,7 @@ def fill_nameOfReglament():
         save_new_reglament.click()
         time.sleep(1)  # тоже хз что делать с этим
     except TimeoutException:
-        print("Не смог нажать на кнопку сохранения регламента")
+        print(Fore.RED + "Не смог нажать на кнопку сохранения регламента")
         driver.quit()
 
 
@@ -376,7 +367,7 @@ while counter <= max_attempts:
             driver.quit()
             break
     except TimeoutException:
-        print("Ошибка: Время ожидания истекло.")
+        print(Fore.RED + "Ошибка: Время ожидания истекло.")
         driver.quit()
         break
     except Exception as e:
@@ -390,7 +381,7 @@ try:
     journal_wait = WebDriverWait(driver, 60).until(
         EC.presence_of_element_located((By.XPATH, "//span[contains(text(),'Регламенты инцидентов')]")))
 except TimeoutException:
-    print("не вышел из страницы")
+    print(Fore.RED + "не вышел из страницы")
     driver.quit()
 
 # test number 44 (ipe-44: Редактирование  регламента инцидента)
@@ -439,7 +430,7 @@ def rename_nameOfReglament():
         edited_name_reg.clear()
         edited_name_reg.send_keys(edited_name_reglament)
     except TimeoutException:
-        print("Не смог нажать на инпут с названием регламента")
+        print(Fore.RED + "Не смог нажать на инпут с названием регламента")
         driver.quit()
 
     try:
@@ -449,7 +440,7 @@ def rename_nameOfReglament():
         save_new_reglament.click()
         time.sleep(1)  # тоже хз что делать с этим
     except TimeoutException:
-        print("Не смог нажать на кнопку сохранения регламента")
+        print(Fore.RED + "Не смог нажать на кнопку сохранения регламента")
         driver.quit()
 
 
@@ -506,7 +497,7 @@ while counter <= max_attempts:
             driver.quit()
             break
     except TimeoutException:
-        print("Ошибка: Время ожидания истекло.")
+        print(Fore.RED + "Ошибка: Время ожидания истекло.")
         driver.quit()
         break
     except Exception as e:
@@ -514,7 +505,7 @@ while counter <= max_attempts:
         driver.quit()
         break
 else:
-    print("Достигнуто максимальное количество попыток. Тест не может быть завершен.")
+    print(Fore.RED + "Достигнуто максимальное количество попыток. Тест не может быть завершен.")
 
     # test number 43 (ipe-43: Добавление регламента задачи)
 
@@ -552,7 +543,7 @@ else:
     print(Fore.RED + "Страница с добавлением нового регламента задачи не открыта")
     driver.quit()
 
-# заполнение поля у нового регламента задач ЦИКЛ
+# заполнение поля у нового регламента задач
 name_of_new_reg_task = driver.find_element(By.XPATH, "//input[@placeholder='Название регламента']")
 name_of_new_reg_task.click()
 name_of_new_reg_task.send_keys(name_of_new_task)
@@ -571,7 +562,7 @@ try:
     wait_for_dropdown_groups = WebDriverWait(driver, 60).until(
         EC.element_to_be_clickable((By.XPATH, "//span[contains(text(),'Группа 5')]")))
 except TimeoutException:
-    print("Не смог открыть выпадающий список")
+    print(Fore.RED + "Не смог открыть выпадающий список")
     driver.quit()
 # выпадающий список групп
 choose_group1_task = driver.find_element(By.XPATH, "//span[contains(text(),'Группа 1')]")
@@ -604,7 +595,7 @@ try:
     choose_category_task = driver.find_element(By.XPATH, "//span[contains(text(),'Биологическая опасность')]")
     choose_category_task.click()
 except TimeoutException:
-    print("Не смог открыть выпадающий список")
+    print(Fore.RED + "Не смог открыть выпадающий список")
     driver.quit()
 
 
@@ -617,7 +608,7 @@ def fill_nameOfTask():
         name_of_newReglTask.clear()
         name_of_newReglTask.send_keys(name_of_new_task)
     except TimeoutException:
-        print("Не смог нажать на инпут с названием регламента задачи")
+        print(Fore.RED + "Не смог нажать на инпут с названием регламента задачи")
         driver.quit()
 
     try:
@@ -626,7 +617,7 @@ def fill_nameOfTask():
         save_new_reglament_task.click()
         time.sleep(1)  # тоже хз что делать с этим
     except TimeoutException:
-        print("Не смог нажать на кнопку сохранения регламента")
+        print(Fore.RED + "Не смог нажать на кнопку сохранения регламента")
         driver.quit()
 
 
@@ -679,11 +670,11 @@ while counter <= max_attempts:
             name_of_newReglTask.clear()
             counter += 1
         else:
-            # print("Уведомление не найдено.")
+            # print("Уведомление не найдено.") # закоментил, потому что начинает люто спамить
             driver.quit()
             break
     except TimeoutException:
-        print("Ошибка: Время ожидания истекло.")
+        print(Fore.RED + "Ошибка: Время ожидания истекло.")
         driver.quit()
         break
     except Exception as e:
@@ -706,28 +697,28 @@ except TimeoutException:
     print(Fore.RED + "Страница с редактированием регламента задачи не открыта")
     driver.quit()
 
-edit_groups_reg_task = driver.find_element(By.XPATH,
-                                           "//span[contains(text(),'Группа 1, Группа 2, Группа 3, Группа 4, Группа 5')]")
-edit_groups_reg_task.click()
+# edit_groups_reg_task = driver.find_element(By.XPATH,
+#                                            "//span[contains(text(),'Группа 1, Группа 2, Группа 3, Группа 4, Группа 5')]")
+# edit_groups_reg_task.click()
 
-try:
-    wait_for_groups_EDIT = WebDriverWait(driver, 60).until(
-        EC.element_to_be_clickable((By.XPATH, "//span[@class='mat-option-text'][contains(text(),'Группа 5')]")))
-    remove_groups_reg_task1 = driver.find_element(By.XPATH,
-                                                  "//span[@class='mat-option-text'][contains(text(),'Группа 5')]")
-    remove_groups_reg_task1.click()
+# try:
+#     wait_for_groups_EDIT = WebDriverWait(driver, 60).until(
+#         EC.element_to_be_clickable((By.XPATH, "//span[@class='mat-option-text'][contains(text(),'Группа 5')]")))
+#     remove_groups_reg_task1 = driver.find_element(By.XPATH,
+#                                                   "//span[@class='mat-option-text'][contains(text(),'Группа 5')]")
+#     remove_groups_reg_task1.click()
+#
+#     remove_groups_reg_task2 = driver.find_element(By.XPATH,
+#                                                   "//span[@class='mat-option-text'][contains(text(),'Группа 4')]")
+#     remove_groups_reg_task2.click()
+# except TimeoutException:
+#     print(Fore.RED + "Не смог изменить группы в Регламенте задач")
+#     driver.quit()
 
-    remove_groups_reg_task2 = driver.find_element(By.XPATH,
-                                                  "//span[@class='mat-option-text'][contains(text(),'Группа 4')]")
-    remove_groups_reg_task2.click()
-except TimeoutException:
-    print("Не смог изменить группы в Регламенте задач")
-    driver.quit()
-
-# клик escape - чтобы выйти из выпадающего списка
-webdriver.ActionChains(driver).send_keys(Keys.ESCAPE).perform()
-# кажется незаменимо))
-time.sleep(0.5)
+# # клик escape - чтобы выйти из выпадающего списка
+# webdriver.ActionChains(driver).send_keys(Keys.ESCAPE).perform()
+# # кажется незаменимо))
+# time.sleep(0.5)
 
 choose_category_task = driver.find_element(By.XPATH, "//span[contains(text(),'Биологическая опасность')]")
 choose_category_task.click()
@@ -738,7 +729,7 @@ try:
     choose_new_category_task = driver.find_element(By.XPATH, "//span[contains(text(),'Коллапс')]")
     choose_new_category_task.click()
 except TimeoutException:
-    print("Не смог изменить Категорию в Регламенте задач")
+    print(Fore.RED + "Не смог изменить Категорию в Регламенте задач")
     driver.quit()
 
 
@@ -752,7 +743,7 @@ def rename_nameOfTask():
         name_of_new_reg_task.clear()
         name_of_new_reg_task.send_keys(edited_name_task)
     except TimeoutException:
-        print("Не смог нажать на инпут с названием регламента задачи")
+        print(Fore.RED + "Не смог нажать на инпут с названием регламента задачи")
         driver.quit()
     try:
         WebDriverWait(driver, 60).until(
@@ -761,7 +752,7 @@ def rename_nameOfTask():
         save_new_reglament.click()
         time.sleep(1)  # тоже хз что делать с этим
     except TimeoutException:
-        print("Не смог нажать на кнопку сохранения регламента")
+        print(Fore.RED + "Не смог нажать на кнопку сохранения регламента")
         driver.quit()
 
 
@@ -818,20 +809,20 @@ while counter <= max_attempts:
             pass
             break
     except TimeoutException:
-        print("Ошибка: Время ожидания истекло.")
+        print(Fore.RED + "Ошибка: Время ожидания истекло.")
         driver.quit()
         break
     except Exception as e:
-        print(f"Произошла ошибка: {e}")
+        print(Fore.RED + f"Произошла ошибка: {e}")
         driver.quit()
         break
 else:
-    print("Достигнуто максимальное количество попыток. Тест не может быть завершен.")
+    print(Fore.RED + "Достигнуто максимальное количество попыток. Тест не может быть завершен.")
 
 try:
     homepage_button = WebDriverWait(driver, 60).until(
-        EC.element_to_be_clickable((By.XPATH, "//span[contains(text(),'Журнал событий')]")))
-    go_to_mainpage = driver.find_element(By.XPATH, "//span[contains(text(),'Журнал событий')]")
+        EC.element_to_be_clickable((By.XPATH, "//mat-icon[normalize-space()='home']")))
+    go_to_mainpage = driver.find_element(By.XPATH, "//mat-icon[normalize-space()='home']")
     go_to_mainpage.click()
 except TimeoutException:
     print(Fore.RED + "Кнопка для перехода на главную страницу недоступна/переход не произошел")
@@ -843,7 +834,7 @@ try:
     add_new_incident.click()
     print(Fore.GREEN + "Перешел на основную страницу")
 except TimeoutException:
-    print("Не перешел на основную страницу, не открыл страницу 'Добавить инцидент' ")
+    print(Fore.RED + "Не перешел на основную страницу, не открыл страницу 'Добавить инцидент' ")
     driver.quit()
 
 try:
@@ -898,7 +889,7 @@ except TimeoutException:
     driver.quit()
 
 # заявка на ТО
-go_to_mainpage = driver.find_element(By.XPATH, "//span[contains(text(),'Журнал событий')]")
+go_to_mainpage = driver.find_element(By.XPATH, "//mat-icon[normalize-space()='home']")
 go_to_mainpage.click()
 
 try:
@@ -1006,7 +997,7 @@ except TimeoutException:
 
 try:
     open_incident = WebDriverWait(driver, 60).until(
-        EC.element_to_be_clickable((By.XPATH, "(//mat-cell[contains(text(),'Массовые беспорядки')])[1]")))
+        EC.element_to_be_clickable((By.XPATH, "(//mat-cell[@role='gridcell'][contains(text(),'Массовые беспорядки')])[1]")))
     action.double_click(open_incident).perform()
 except TimeoutException:
     driver.quit()
@@ -1041,7 +1032,7 @@ except TimeoutException:
 # проверка координат
 try:
     open_incident = WebDriverWait(driver, 60).until(
-        EC.element_to_be_clickable((By.XPATH, "(//mat-cell[contains(text(),'Массовые беспорядки')])[1]")))
+        EC.element_to_be_clickable((By.XPATH, "(//mat-cell[@role='gridcell'][contains(text(),'Массовые беспорядки')])[1]")))
     action.double_click(open_incident).perform()
 except TimeoutException:
     driver.quit()
