@@ -780,6 +780,8 @@ while counter <= max_attempts:
         result = check_notifications()
         if result == "success":
             print(f"Задача с названием '{edited_name_task}' успешно добавлена.")
+            print(Fore.GREEN + "Уведомление 'Данные успешно сохранены' появилось")
+            print(Fore.BLUE + "Test case 'ipe-45  Редактирование регламента задачи' - ПРОЙДЕНО")
             try:
                 notification = WebDriverWait(driver, 10).until(
                     EC.presence_of_element_located((By.XPATH, "//div[@class='noty_message']")))
@@ -787,8 +789,7 @@ while counter <= max_attempts:
                 while True:
                     try:
                         notification.is_displayed()  # Проверяем, видим ли элемент
-                        print(Fore.GREEN + "Уведомление 'Данные успешно сохранены' появилось")
-                        print(Fore.BLUE + "Test case 'ipe-45  Редактирование регламента задачи' - ПРОЙДЕНО")
+                        time.sleep(3)
                     except:
                         break  # Если элемент не видим, выходим из цикла
                     time.sleep(1)  # Если элемент видим, ждем 1 секунду и повторяем проверку
@@ -806,7 +807,7 @@ while counter <= max_attempts:
         else:
             # print("Уведомление не найдено.")
             # VERY IMPORTANT: пока прописан PASS - т.к не появляется уведомление при редактировании - есть задача, заменить после фикса задачи
-            pass
+            #pass
             break
     except TimeoutException:
         print(Fore.RED + "Ошибка: Время ожидания истекло.")
@@ -1035,6 +1036,7 @@ try:
         EC.element_to_be_clickable((By.XPATH, "(//mat-cell[@role='gridcell'][contains(text(),'Массовые беспорядки')])[1]")))
     action.double_click(open_incident).perform()
 except TimeoutException:
+    print(Fore.RED + "Инцидент edited_autotest1 не открылся")
     driver.quit()
 
 try:
